@@ -1,4 +1,4 @@
-# TCL 65" C7K QD-Mini LED Google TV, Brazil (device G08, model "Smart TV Pro", MediaTek mt5896)
+# TCL 65" C6K QD-Mini LED Google TV, United Kingdom (device G08, model "Smart TV Pro", MediaTek mt5896)
 # Android 14 (Google TV), firmware UTT2.250416.001, product G08_4K_GB, locale pt-BR.
 # Same G08 board and build as examples/tcl-c755-google-tv; that list was the starting point.
 #
