@@ -260,6 +260,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private FestiveLamp lamp;
     private BellDrawable bell;
     private MarigoldDrawable marigold;
+    private SnowFallView snowFallView;
     private int greetingColor;
     /** The day the petal shower last played, so it greets the first Home of each day only. */
     private static LocalDate lastPetalShower;
@@ -1097,6 +1098,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         sky.update();
         wallpaperPlayer.start();
         handler.postDelayed(minuteTick, MINUTE_MS);
+        if (snowFallView != null) snowFallView.start();
         if (festive && lamp != null) {
             lamp.start();
             LocalDate today = LocalDate.now();
@@ -1281,6 +1283,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         if (gameDay != null) gameDay.stop();
         handler.removeCallbacks(turnTick);
         if (lamp != null) lamp.stop();
+        if (snowFallView != null) snowFallView.stop();
         cancelPendingFocusScroll();
         // Nothing of ours stays on screen over another app; an undecided prompt simply returns next time.
         if (cardPrompt != null) cardPrompt.dismiss();
@@ -1335,6 +1338,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (snowFallView != null) snowFallView.stop();
         RemoteKeys.release(this);
         cancelHoldOk();
         if (gameDay != null) gameDay.shutdown();
@@ -3005,6 +3009,16 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
      * Settings that floats up.
      */
     private void applyFestiveSkin(TextView inputs, TextView settings) {
+        if (festival.isChristmas()) {
+            if (snowFallView == null) {
+                snowFallView = new SnowFallView(this);
+                snowFallView.setReducedMotion(reducedMotion);
+                root.addView(snowFallView, new FrameLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            }
+            if (resumed) snowFallView.start();
+            return;
+        }
         if (festival.isHalloween()) {
             SpookyIconDrawable bat = new SpookyIconDrawable(getResources(), density, SpookyIconDrawable.BAT);
             SpookyIconDrawable ghost = new SpookyIconDrawable(getResources(), density, SpookyIconDrawable.GHOST);

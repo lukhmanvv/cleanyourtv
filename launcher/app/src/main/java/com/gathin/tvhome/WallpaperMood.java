@@ -15,13 +15,13 @@ import java.util.Set;
  * has none of the collection's pictures, falls back to the whole collection.
  */
 final class WallpaperMood {
-    static final String MORNING = "morning", EVENING = "evening", NIGHT = "night";
-    static final String[] ALL = {MORNING, EVENING, NIGHT};
+    static final String MORNING = "morning", AFTERNOON = "afternoon", EVENING = "evening", NIGHT = "night";
+    static final String[] ALL = {MORNING, AFTERNOON, EVENING, NIGHT};
     /** Sunrise and sunset in minutes of the day, without a place (or where the sun does not rise or set that day). */
-    static final int DEFAULT_SUNRISE = 7 * 60, DEFAULT_SUNSET = 18 * 60 + 30;
+    static final int DEFAULT_SUNRISE = 7 * 60, DEFAULT_SUNSET = 18 * 60;
     private static final int NOON = 12 * 60;
-    /** Evening lasts this long after sunset, while the sky still glows. */
-    private static final int DUSK_MINUTES = 30;
+    /** Evening lasts until sunset (or 18:00 default). */
+    private static final int DUSK_MINUTES = 0;
 
     private WallpaperMood() {
     }
@@ -29,7 +29,7 @@ final class WallpaperMood {
     /** The mood at this minute of the day, for a sunrise and sunset in minutes of the day. */
     static String timeOfDay(int minute, int sunrise, int sunset) {
         if (minute >= sunrise && minute < NOON) return MORNING;
-        if (minute >= NOON && minute < sunset + DUSK_MINUTES) return EVENING;
+        if (minute >= NOON && minute < 18 * 60) return AFTERNOON;
         return NIGHT;
     }
 
@@ -49,6 +49,7 @@ final class WallpaperMood {
     /** The pictures in the mood's group, in the collection's order; all of them when the group has none. */
     static List<File> select(List<File> all, Map<String, Set<String>> groups, String mood) {
         Set<String> names = groups.get(mood);
+        if (names == null && AFTERNOON.equals(mood)) names = groups.get(EVENING);
         if (names == null) return all;
         List<File> group = new ArrayList<>();
         for (File file : all) if (names.contains(file.getName())) group.add(file);

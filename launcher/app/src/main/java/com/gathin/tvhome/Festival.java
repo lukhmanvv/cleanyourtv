@@ -26,6 +26,12 @@ final class Festival {
     /** Pumpkin orange, Halloween's accent when the theme names no colour. */
     static final int PUMPKIN = 0xFFFF7A1A;
 
+    /** Christmas / winter skin with falling snow and Santa cap on app tile. */
+    static final String CHRISTMAS = "christmas";
+    static final String WINTER = "winter";
+    static final String WINTER_SNOW = "winter-snow";
+    static final int CHRISTMAS_RED = 0xFFD42426;
+
     /** Lower-case festival name, or "" for none. */
     final String name;
     /** Last day the skin shows, inclusive; null for no end date. */
@@ -83,12 +89,19 @@ final class Festival {
 
     int accentColor() {
         if (accent != 0) return accent;
-        return isHalloween() ? PUMPKIN : DEFAULT_ACCENT;
+        if (isHalloween()) return PUMPKIN;
+        if (isChristmas()) return CHRISTMAS_RED;
+        return DEFAULT_ACCENT;
     }
 
     /** Whether this is the Halloween skin rather than the diya, bell and marigold. */
     boolean isHalloween() {
         return HALLOWEEN.equals(name);
+    }
+
+    /** Whether this is the Christmas / winter skin. */
+    boolean isChristmas() {
+        return CHRISTMAS.equals(name) || WINTER.equals(name) || WINTER_SNOW.equals(name);
     }
 
     /** {@code #RRGGBB} to an opaque colour, anything else to 0. */
