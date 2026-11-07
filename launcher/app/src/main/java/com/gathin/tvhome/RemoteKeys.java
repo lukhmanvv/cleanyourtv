@@ -348,7 +348,7 @@ final class RemoteKeys {
     static boolean isAction(String target) {
         switch (target) {
             case "back": case "home": case "recents": case "mute": case "sleep":
-            case "screensaver": case "settings": case "wifi": case "library": case "ignore":
+            case "screensaver": case "settings": case "wifi": case "accounts": case "library": case "ignore":
                 return true;
             default:
                 return false;
@@ -383,6 +383,11 @@ final class RemoteKeys {
                 break;
             case "wifi":
                 start(ctx, SystemSettings.intent(ctx, Settings.ACTION_WIFI_SETTINGS));
+                break;
+            case "accounts":
+                // Accounts and profiles, for a profile button whose chooser lived in the disabled stock launcher
+                // (XGIMI, TCL Google TV); the main Settings screen where the firmware has no such page.
+                start(ctx, SystemSettings.accountsIntent(ctx));
                 break;
             case "library":
                 // Home with the App library open on top; Home does nothing when app_library is off.

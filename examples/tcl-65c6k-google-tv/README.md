@@ -25,6 +25,8 @@ again in Settings > Network & Internet moved it to `com.android.tv.settings`; th
 `tools/disable.sh` (Wi-Fi and ADB stayed up) and the second run took Home, with launcherx disabled. With setupwraith off,
 casting to this TV stops working; enabling it again brings casting back.
 
+**Accounts and profiles.** With `launcherx` disabled, Google TV's side-menu shortcut for Accounts & profiles fails to open because Google delegates it to launcherx. The underlying Android Accounts screen is intact: open it directly with `tools/tv.py 'am start -a android.settings.USER_SETTINGS'`, or map a remote key to `"accounts"` in `app_keys`.
+
 What was checked on the TV: Home and the Inputs menu (HDMI 1-4 and Live TV, `live_tv_package` `com.tcl.tv`) after
 the handover; after the reboot, the owner pressed the real Input, Settings, app and microphone buttons and all
 worked with the stock launcher disabled and **no key helper enabled**, and holding Volume Up still ramped. That

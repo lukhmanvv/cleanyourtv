@@ -752,11 +752,12 @@ Things that bit us or contributors, so they don't bite you. Commands use `tools/
   network's name and password stands in for a missing router); wipe the cache partition from the recovery
   menu. A factory reset also works but erases everything, so it comes last. The prompt now keeps the stock
   launcher enabled on CVTE boards without a tested list.
-- **Accounts & profiles is empty after the stock launcher is disabled** (TCL 75C845X2, `G08_4K_GB`,
+- **Accounts & profiles is empty or does not open after the stock launcher is disabled** (TCL 75C845X2 / 55C6K, `G08_4K_GB`,
   Google TV 14, [#304](https://github.com/Gathin23/cleanyourtv/discussions/304)). The accounts are still
-  there (`dumpsys account` lists them); the page lives in `com.google.android.apps.tv.launcherx`, and while
-  launcherx is enabled it takes Home back (`set-home-activity` prints `Success` and changes nothing, and
-  its home activity can't be disabled from the shell). To switch profile: `pm enable --user 0
+  there (`dumpsys account` lists them); the side-panel shortcut delegates to `com.google.android.apps.tv.launcherx`,
+  which fails when launcherx is disabled. The underlying Android Accounts and profiles screen remains intact:
+  open it directly with `tools/tv.py 'am start -a android.settings.USER_SETTINGS'`, or map a remote key to
+  `"accounts"` in `app_keys` (e.g. `"KEYCODE_F6:accounts"`). To switch in Google's own overlay instead: `pm enable --user 0
   com.google.android.apps.tv.launcherx`, switch in Settings, then disable it again and set Home last.
 - **Voice search for a song or video says "Google Assistant is having trouble processing your request"**
   once launcherx is disabled, while app commands ("open YouTube") still work. Seen on an onn 4K Streaming

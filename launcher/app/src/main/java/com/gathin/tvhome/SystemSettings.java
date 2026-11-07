@@ -76,4 +76,33 @@ final class SystemSettings {
         }
         return intent(context, Settings.ACTION_DISPLAY_SETTINGS);
     }
+
+    /**
+     * The TV's Accounts and Profiles settings screen. On Google TV sets where the stock launcher
+     * (launcherx) is disabled, the side panel's Account item fails because it delegates to
+     * launcherx's ProfileChooserActivity. Resolving to ACTION_USER_SETTINGS, AccountActivity, or
+     * ACTION_SYNC_SETTINGS opens the system Accounts screen directly without reviving launcherx.
+     */
+    static Intent accountsIntent(Context context) {
+        PackageManager pm = context.getPackageManager();
+        Intent user = new Intent("android.settings.USER_SETTINGS");
+        if (pm.resolveActivity(user, PackageManager.MATCH_DEFAULT_ONLY) != null) {
+            return user;
+        }
+        ComponentName googleTv = new ComponentName("com.android.tv.settings",
+                "com.google.android.tv.settings.AccountActivity");
+        if (pm.resolveActivity(new Intent().setComponent(googleTv), 0) != null) {
+            return new Intent().setComponent(googleTv);
+        }
+        ComponentName aosp = new ComponentName("com.android.tv.settings",
+                "com.android.tv.settings.accounts.AccountsActivity");
+        if (pm.resolveActivity(new Intent().setComponent(aosp), 0) != null) {
+            return new Intent().setComponent(aosp);
+        }
+        Intent sync = new Intent(Settings.ACTION_SYNC_SETTINGS);
+        if (pm.resolveActivity(sync, PackageManager.MATCH_DEFAULT_ONLY) != null) {
+            return sync;
+        }
+        return intent(context, Settings.ACTION_SETTINGS);
+    }
 }
